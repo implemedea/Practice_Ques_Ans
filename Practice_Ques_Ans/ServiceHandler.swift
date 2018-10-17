@@ -46,5 +46,30 @@ class serviceHandler {
     }
    
     
+    func serviceCallUsingGCD(){
+        DispatchQueue.global(qos: .userInitiated).async {
+            let config = URLSessionConfiguration.default
+            let session = URLSession.init(configuration: config)
+            var urlrequest = URLRequest(url: URL(string: "https://swapi.co/api/planets/1/")!)
+            urlrequest.httpMethod = "GET"
+           
+            let task = session.dataTask(with: urlrequest, completionHandler: { (data, response, error) in
+                guard let data = data else{
+                    return
+                }
+                do{
+                    let json = try JSONSerialization.jsonObject(with: data, options: [])
+                    DispatchQueue.main.async {
+                         print(json)
+                    }
+                }catch{
+                    print("error")
+                }
+                
+            })
+            task.resume()
+        }
+    }
+    
    
 }

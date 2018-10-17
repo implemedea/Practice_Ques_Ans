@@ -48,6 +48,9 @@ class SearchResultViewController: UIViewController {
         self.activityIndicator.isHidden = false
         self.activityIndicator.startAnimating()
         let service = serviceHandler.init(url: "https://swapi.co/api/planets/1/", method: "GET")
+        
+        service.serviceCallUsingGCD()
+        
         service.callService { (response) in
             DispatchQueue.main.async {
                 self.activityIndicator.stopAnimating()
