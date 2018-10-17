@@ -32,24 +32,22 @@ class Practice_Ques_AnsTests: XCTestCase {
     }
     
     func testResponse(){
+        let expec = XCTestExpectation(description: "service need to be complete")
         let service = serviceHandler.init(url: "https://swapi.co/api/planets/1/", method: "GET")
-        self.waitForExpectations(timeout: 10) { error in
-            if let error = error {
-                print("Error: \(error.localizedDescription)")
+        service.callService { (response) in
+            XCTAssertNotNil(response)
+            guard let response = response else{
+                return
             }
-            service.callService { (response) in
-                XCTAssertNotNil(response)
-                guard let response = response else{
-                    return
-                }
-                let aryResidence = response.residents
-                XCTAssertTrue(aryResidence.count > 0, "Residence has value")
-            }
+            let aryResidence = response.residents
+            XCTAssertTrue(aryResidence.count > 0, "Residence has value")
+            expec.fulfill()
         }
-       
-       
+       wait(for: [expec], timeout: 10.0)
         
         
     }
 
+    
+    
 }

@@ -53,6 +53,14 @@ class ViewController: UIViewController {
     
     
     @IBAction func search(_ sender: Any) {
+        if(self.txtFieldSearch.text == ""){
+            let alert = UIAlertController(title: "ALert", message: "Please enter value to search", preferredStyle: .alert)
+            let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
+            alert.addAction(action)
+            self.present(alert, animated: true, completion: nil)
+            return
+        }
+        
        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
         let vcSearch = storyBoard.instantiateViewController(withIdentifier: "SearchResultViewController")
         self.present(vcSearch, animated: true, completion: nil)
@@ -64,12 +72,11 @@ class ViewController: UIViewController {
 }
 
 extension ViewController:UITextFieldDelegate{
-    
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if((string.range(of: "1234567890")) != nil){
-            return true
-        }
-        return false
+        let set = CharacterSet(charactersIn: "0123456789").inverted
+        let seperate = string.components(separatedBy: set)
+        let join = seperate.joined(separator: "")
+        return string == join
     }
     
 }
